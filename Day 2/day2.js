@@ -260,7 +260,7 @@ ababab`;
 // testIds checksum = 12
 // 4 * 3 = 12
 
-const isTest = true;
+const isTest = false;
 
 const parsedData = (isTest ? testIds : ids)
   .split("\n");
@@ -271,13 +271,13 @@ let threeMatch = 0;
 let sortedData = parsedData.slice().sort();
 let compareData = [];
 
-// console.log(data);
+function hasDuplicates(array) {
+    return (new Set(array)).size !== array.length;
+}
 
 for(let i = 0; i < sortedData.length; i++) {
     let letters = sortedData[i].split("");
     letters.sort();
-    console.log(letters);
-
     let current = null;
     let counter = 0;
 
@@ -286,10 +286,8 @@ for(let i = 0; i < sortedData.length; i++) {
             if(counter > 0) {
             console.log(`${current} counted ${counter} times`);
                 if(counter == 2) {
-                    twoMatch += 1;
                     compareData.push(counter);
                 } else if(counter == 3) {
-                    threeMatch += 1;
                     compareData.push(counter);
                 } 
             }
@@ -300,42 +298,66 @@ for(let i = 0; i < sortedData.length; i++) {
         }
     }
     if (counter > 0) {
-        console.log(`${current} counted ${counter} timeS`);
+        console.log(`${current} counted ${counter} times.`);
         if(counter == 2) {
-            twoMatch += 1;
             compareData.push(counter);
-            console.log(compareData.slice(0, i + twoMatch));
+            if(hasDuplicates(compareData)) {
+                compareData.splice(i, 1);
+            }
+            if(compareData.includes(2)) {
+                twoMatch += 1;
+            }
+            if(compareData.includes(3)) {
+                threeMatch += 1;
+            }
+            if(compareData.includes(2, 3)) {
+                twoMatch += 1;
+                threeMatch += 1;
+            }
+            compareData = [];
         } else if(counter == 3) {
-            threeMatch += 1;
             compareData.push(counter);
-            console.log(compareData.slice(0, i));
+            if(hasDuplicates(compareData)) {
+                compareData.splice(i, 1);
+            }
+            if(compareData.includes(2)) {
+                twoMatch += 1;
+            }
+            if(compareData.includes(3)) {
+                threeMatch += 1;
+            }
+            if(compareData.includes(2, 3)) {
+                twoMatch += 1;
+                threeMatch += 1;
+            }            
+            compareData = [];
         } else {
-            console.log(compareData.slice(0, i));
+            if(hasDuplicates(compareData)) {
+                compareData.splice(i, 1);
+            }
+            if(compareData.includes(2)) {
+                twoMatch += 1;
+            }
+            if(compareData.includes(3)) {
+                threeMatch += 1;
+            }
+            if(compareData.includes(2, 3)) {
+                twoMatch += 1;
+                threeMatch += 1;
+            } 
+            compareData = [];
         }
     }
 } 
 
-console.log(`Number of double matches are ${twoMatch}`);
-console.log(`Number of triple matches are ${threeMatch}`);
-console.log(compareData);
+// console.log(`Number of double matches are ${twoMatch}`);
+// console.log(`Number of triple matches are ${threeMatch}`);
 
-let start = 0;
-let finish = 0;
-
-for(let i = 0; i < compareData.length; i++) {
-    // if endOfArray, slice previous values into new array
-    if(compareData[i] == "endOfArray") {
-        let newArr = compareData.slice(start, finish);
-        let index = newArr.indexOf("endOfArray");
-            if (index > -1) {
-                newArr.splice(index, finish);
-            }
-        console.log(newArr);
-        start = finish;
-    } else {
-        finish++;
-    }
+function checkSum(val1, val2) {
+    return val1 * val2;
 }
+
+console.log(checkSum(twoMatch, threeMatch));
 
 
 
