@@ -249,115 +249,151 @@ qcsnyvhigkzmrdrwljuefodxbh
 qcsnyvpigkacrdawtjuefotxbh
 qcsnyvpigkzmylawlquefotxbh`;
 
-const testIds = `abcdef
-bababc
-abbcde
-abcccd
-aabcdd
-abcdee
-ababab`;
-
 // testIds checksum = 12
 // 4 * 3 = 12
 
-const isTest = false;
+const isTest = true;
 
-const parsedData = (isTest ? testIds : ids)
-  .split("\n");
+// Part 1
+const partOne = (function(){
 
-let twoMatch = 0;
-let threeMatch = 0;
+    const testIds = `abcdef
+        bababc
+        abbcde
+        abcccd
+        aabcdd
+        abcdee
+        ababab`;
 
-let sortedData = parsedData.slice().sort();
-let compareData = [];
+    const parsedData = (isTest ? testIds : ids)
+    .split("\n");
 
-function hasDuplicates(array) {
-    return (new Set(array)).size !== array.length;
-}
+    let twoMatch = 0;
+    let threeMatch = 0;
 
-for(let i = 0; i < sortedData.length; i++) {
-    let letters = sortedData[i].split("");
-    letters.sort();
-    let current = null;
-    let counter = 0;
+    let sortedData = parsedData.slice().sort();
+    let compareData = [];
 
-    for(let j = 0; j < letters.length; j++) {
-        if(letters[j] !== current) {
-            if(counter > 0) {
-            console.log(`${current} counted ${counter} times`);
-                if(counter == 2) {
-                    compareData.push(counter);
-                } else if(counter == 3) {
-                    compareData.push(counter);
+    function hasDuplicates(array) {
+        return (new Set(array)).size !== array.length;
+    }
+
+    for(let i = 0; i < sortedData.length; i++) {
+        let letters = sortedData[i].split("");
+        letters.sort();
+        let current = null;
+        let counter = 0;
+
+        for(let j = 0; j < letters.length; j++) {
+            if(letters[j] !== current) {
+                if(counter > 0) {
+                console.log(`${current} counted ${counter} times`);
+                    if(counter == 2) {
+                        compareData.push(counter);
+                    } else if(counter == 3) {
+                        compareData.push(counter);
+                    } 
+                }
+                current = letters[j];
+                counter = 1;
+            } else {
+                counter++;
+            }
+        }
+        if (counter > 0) {
+            console.log(`${current} counted ${counter} times.`);
+            if(counter == 2) {
+                compareData.push(counter);
+                if(hasDuplicates(compareData)) {
+                    compareData.splice(i, 1);
+                }
+                if(compareData.includes(2)) {
+                    twoMatch += 1;
+                }
+                if(compareData.includes(3)) {
+                    threeMatch += 1;
+                }
+                if(compareData.includes(2, 3)) {
+                    twoMatch += 1;
+                    threeMatch += 1;
+                }
+                compareData = [];
+            } else if(counter == 3) {
+                compareData.push(counter);
+                if(hasDuplicates(compareData)) {
+                    compareData.splice(i, 1);
+                }
+                if(compareData.includes(2)) {
+                    twoMatch += 1;
+                }
+                if(compareData.includes(3)) {
+                    threeMatch += 1;
+                }
+                if(compareData.includes(2, 3)) {
+                    twoMatch += 1;
+                    threeMatch += 1;
+                }            
+                compareData = [];
+            } else {
+                if(hasDuplicates(compareData)) {
+                    compareData.splice(i, 1);
+                }
+                if(compareData.includes(2)) {
+                    twoMatch += 1;
+                }
+                if(compareData.includes(3)) {
+                    threeMatch += 1;
+                }
+                if(compareData.includes(2, 3)) {
+                    twoMatch += 1;
+                    threeMatch += 1;
                 } 
+                compareData = [];
             }
-            current = letters[j];
-            counter = 1;
-        } else {
-            counter++;
         }
+    } 
+
+    // console.log(`Number of double matches are ${twoMatch}`);
+    // console.log(`Number of triple matches are ${threeMatch}`);
+
+    function checkSum(val1, val2) {
+        return val1 * val2;
     }
-    if (counter > 0) {
-        console.log(`${current} counted ${counter} times.`);
-        if(counter == 2) {
-            compareData.push(counter);
-            if(hasDuplicates(compareData)) {
-                compareData.splice(i, 1);
-            }
-            if(compareData.includes(2)) {
-                twoMatch += 1;
-            }
-            if(compareData.includes(3)) {
-                threeMatch += 1;
-            }
-            if(compareData.includes(2, 3)) {
-                twoMatch += 1;
-                threeMatch += 1;
-            }
-            compareData = [];
-        } else if(counter == 3) {
-            compareData.push(counter);
-            if(hasDuplicates(compareData)) {
-                compareData.splice(i, 1);
-            }
-            if(compareData.includes(2)) {
-                twoMatch += 1;
-            }
-            if(compareData.includes(3)) {
-                threeMatch += 1;
-            }
-            if(compareData.includes(2, 3)) {
-                twoMatch += 1;
-                threeMatch += 1;
-            }            
-            compareData = [];
-        } else {
-            if(hasDuplicates(compareData)) {
-                compareData.splice(i, 1);
-            }
-            if(compareData.includes(2)) {
-                twoMatch += 1;
-            }
-            if(compareData.includes(3)) {
-                threeMatch += 1;
-            }
-            if(compareData.includes(2, 3)) {
-                twoMatch += 1;
-                threeMatch += 1;
-            } 
-            compareData = [];
-        }
+
+    console.log(checkSum(twoMatch, threeMatch));
+
+})();
+
+// Part 2
+const partTwo = (function() {
+
+    const testIds = `abcde fghij klmno pqrst fguij axcye wvxyz`;
+    const parsedData = (isTest ? testIds : ids).split(" ");
+
+    console.log(parsedData);
+
+    let idArr = [];
+    let idArrSorted = []
+
+    for(let i = 0; i < parsedData.length; i++) {
+        let id = parsedData[i];
+        idArr.push(id);
+        let sortedLetters = idArr.toString().split("").sort().join("");
+        idArrSorted.push(sortedLetters);
+
+        // for(let k = 0; k < idArr.length; k++) {
+        //     let idLetter = idArr[k];
+        //     idArrSorted.push(idLetter);
+        //     console.log(idArrSorted);
+        // }
+        idArr = [];
     }
-} 
 
-// console.log(`Number of double matches are ${twoMatch}`);
-// console.log(`Number of triple matches are ${threeMatch}`);
+    console.log(idArrSorted);
+    
+})();
 
-function checkSum(val1, val2) {
-    return val1 * val2;
-}
 
-console.log(checkSum(twoMatch, threeMatch));
 
 
 
